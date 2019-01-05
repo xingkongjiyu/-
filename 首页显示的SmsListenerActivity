@@ -1,0 +1,89 @@
+package com.tk178zhe.android.SmsListener;
+
+  
+
+  import android.app.Activity;
+
+  import android.content.IntentFilter;
+
+  import android.os.Bundle;
+
+  import android.view.View;
+
+  import android.widget.Toast;
+
+  
+
+  public class SmsListenerActivity extends Activity {
+
+     private SmsRecevier recevier;
+
+     private boolean isregiset = false;
+
+     private static final String ACTION = "android.provider.Telephony.SMS_RECEIVED";
+
+ 
+
+     @Override
+
+     public void onCreate(Bundle savedInstanceState) {
+
+         super.onCreate(savedInstanceState);
+
+         setContentView(R.layout.main);
+
+         recevier = new SmsRecevier();
+
+     }
+
+     public void regiset(View v) {
+
+         IntentFilter filter = new IntentFilter(ACTION);
+
+         filter.setPriority(1000);//设置优先级最大
+
+         registerReceiver(recevier, filter);
+
+         isregiset = true;
+
+         Toast.makeText(this, "注册成功", 0).show();
+
+     }
+
+ 
+
+     public void unregiset(View v) {
+
+         if (recevier != null && isregiset) {
+
+              unregisterReceiver(recevier);
+
+             isregiset = false;
+
+             Toast.makeText(this, "解注册成功", 0).show();
+
+         } else
+
+             Toast.makeText(this, "尚未注册", 0).show();
+
+     }
+
+     @Override
+
+     protected void onDestroy() {
+
+         super.onDestroy();
+
+         if (recevier != null && isregiset) {
+
+              unregisterReceiver(recevier);
+
+             isregiset = false;
+
+             Toast.makeText(this, "解注册成功", 0).show();
+
+         }
+
+     }
+
+ }
